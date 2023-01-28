@@ -58,9 +58,8 @@ def set_up_blockchain(contract: str):
         RINK_API_URL = f"https://rinkeby.infura.io/v3/{INFURA_KEY}"
 
         w3 = Web3(Web3.HTTPProvider(RINK_API_URL))
-        # ABI = load_json(abi_path)["abi"]  # get the ABI
         ABI = json.load(open('abi.json'))
-        CODE_NFT = w3.eth.contract(address=contract, abi=ABI)  # The contract
+        CODE_NFT = w3.eth.contract(address=contract, abi=ABI)
         CHAIN_ID = 4
 
         open_sea_url = f"https://testnets.opensea.io/assets/{contract}/"
@@ -70,9 +69,8 @@ def set_up_blockchain(contract: str):
         MUMBAI_API_URL = f"https://polygon-mumbai.infura.io/v3/{INFURA_KEY}"
 
         w3 = Web3(Web3.HTTPProvider(MUMBAI_API_URL))
-        # ABI = load_json(abi_path)["abi"]  # get the ABI
         ABI = json.load(open('abi.json'))
-        CODE_NFT = w3.eth.contract(address=contract, abi=ABI)  # The contract
+        CODE_NFT = w3.eth.contract(address=contract, abi=ABI)
         CHAIN_ID = 80001
 
         open_sea_url = f"https://testnets.opensea.io/assets/{contract}/"
@@ -82,9 +80,8 @@ def set_up_blockchain(contract: str):
         POLYGON_API_URL = f"https://polygon-mainnet.infura.io/v3/{INFURA_KEY}"
 
         w3 = Web3(Web3.HTTPProvider(POLYGON_API_URL))
-        # ABI = load_json(abi_path)["abi"]  # get the ABI
         ABI = json.load(open('abi.json'))
-        CODE_NFT = w3.eth.contract(address=contract, abi=ABI)  # The contract
+        CODE_NFT = w3.eth.contract(address=contract, abi=ABI)
         CHAIN_ID = 137
 
         open_sea_url = f"https://opensea.io/assets/matic/{contract}/"
@@ -130,7 +127,7 @@ def web3_mint(userAddress: str, eth_json: Dict[str, Any]) -> str:
 
     nonce = w3.eth.get_transaction_count(PUBLIC_KEY)
 
-    # Create the contracrt
+    # Create the contract
     mint_txn = CODE_NFT.functions.mintNFT(userAddress, "web2").buildTransaction(
         {
             "chainId": CHAIN_ID,
@@ -147,10 +144,9 @@ def web3_mint(userAddress: str, eth_json: Dict[str, Any]) -> str:
 
     logging.info(f"mint txn hash: {hash} ")
 
-    receipt = w3.eth.wait_for_transaction_receipt(hash)  # hmmm have to wait...
+    receipt = w3.eth.wait_for_transaction_receipt(hash)
 
-    hex_tokenid = receipt["logs"][0]["topics"][3].hex()  # this is token id in hex
-
+    hex_tokenid = receipt["logs"][0]["topics"][3].hex()
     # convert from hex to decmial
     tokenid = int(hex_tokenid, 16)
     logging.info(f"Got tokenid: {tokenid}")
